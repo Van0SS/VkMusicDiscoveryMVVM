@@ -1,0 +1,101 @@
+﻿<UserControl x:Class="VkMusicDiscoveryMVVM.View.PlayerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:VkMusicDiscoveryMVVM.View"
+             xmlns:vm="clr-namespace:VkMusicDiscoveryMVVM.ViewModel"
+             mc:Ignorable="d"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             d:DesignHeight="32" d:DesignWidth="600">
+
+    <UserControl.Resources>
+        <vm:PlayerViewModel x:Key="PlayerViewModel"/>
+        <Polygon x:Key="PlayPic" Points="0,0 20,10, 0,20" Stroke="WhiteSmoke" Fill="Black" Margin="1"/>
+        <StackPanel x:Key="PausePic" Orientation="Horizontal">
+            <Polygon Points="0,0 7,0, 7,20 0,20" Stroke="WhiteSmoke" Fill="Black" Margin="2,1,0,1"/>
+            <Polygon Points="0,0 7,0, 7,20 0,20" Stroke="WhiteSmoke" Fill="Black" Margin="1,1,2,1"/>
+        </StackPanel>
+    </UserControl.Resources>
+    
+    <Border BorderThickness="1" Background="AliceBlue" BorderBrush="Gray">
+        <Grid DataContext="{StaticResource PlayerViewModel}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button x:Name="BtnPlayerOpen" Command="{Binding BtnPlayerOpenCommand}">
+                    <StackPanel>
+                        <Polygon Points="10,0 20,10, 0,10" Stroke="WhiteSmoke" Fill="Black" Margin="1"></Polygon>
+                        <Polygon Points="1,0 19,0, 19,5 1,5" Stroke="WhiteSmoke" Fill="Black" Margin="1,1,1,1"></Polygon>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnPlayerPrev" Command="{Binding BtnPlayerPrevCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Polygon Points="0,10 10,0, 10,20" Stroke="WhiteSmoke" Fill="Black" Margin="0"></Polygon>
+                        <Polygon Points="0,10 10,0, 10,20" Stroke="WhiteSmoke" Fill="Black" Margin="0"></Polygon>
+                    </StackPanel>
+                </Button>
+                <Button x:Name="BtnPlayerPlayPause" Height="31" Width="29" Command="{Binding BtnPlayerPlayPauseCommand}"
+                            Content="{StaticResource PlayPic}"/>
+                <Button x:Name="BtnPlayerNext" Command="{Binding BtnPlayerNextCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Polygon Points="0,0 0,20, 10,10" Stroke="WhiteSmoke" Fill="Black" Margin="0"></Polygon>
+                        <Polygon Points="0,0 0,20, 10,10" Stroke="WhiteSmoke" Fill="Black" Margin="0"></Polygon>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <Grid Grid.Column="1" Margin="5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" x:Name="TbPlayerSong" VerticalAlignment="Center"
+                               FontFamily="Segoe Print" TextTrimming="CharacterEllipsis"
+                           Text="{Binding TbTitleBar}"/>
+
+                <TextBlock x:Name="TbPlayerTime" Grid.Row="0" Grid.Column="1" Margin="0"
+                               VerticalAlignment="Center" Text="{Binding TbPlayerTime}"/>
+
+                <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" x:Name="ProgressBarPlayer" Height="10"
+                                 Foreground="#FF011ED3" Maximum="{Binding ProgressBarMaximum}"
+                             Value="{Binding ProgressBarValue}" MouseLeftButtonDown="ProgressBarPlayer_MouseLeftButtonDown">
+                </ProgressBar>
+            </Grid>
+
+            <StackPanel Grid.Column="2"  Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button Command="{Binding BtnPlayerShuffleCommand}" ToolTip="True random!" FlowDirection="LeftToRight">
+                    <Grid x:Name="GridButtonShuffle">
+                        <Polygon Points="0,17.5 5,17.5 10,7.5 15,7.5 14,10 20,5 15,0 15,2.5 7.5,2.5 2.5,12.5 0,12.5" Stroke="#333333"/>
+                        <Polygon Points="2.5,7.5 0,7.5 0,2.5 5,2.5 5.5,3 3,8" Stroke="#333333"/>
+                        <Polygon Points="10,12.5 15,12.5 14,10 20,15 15,20 15,17.5 7.5,17.5 7,17 9,13" Stroke="#333333"/>
+                    </Grid>
+                </Button>
+
+                <Button Command="{Binding BtnPlayerRepeatCommand}" ToolTip="Repeat one song">
+                    <StackPanel x:Name="PanelBtnRepeat" FlowDirection="LeftToRight">
+                        <Polygon Points="0,10 0,5 5,2.5 15,2.5 15,0 20,5 15,10 15,7.5 5,7.5" Stroke="#333333" />
+                        <Polygon Points="20,0 20,5 15,7.5 5,7.5 5,10 0,5 5,0 5,2.5 15,2.5" Stroke="#333333"/>
+                    </StackPanel>
+                </Button>
+                <Slider FlowDirection="LeftToRight" x:Name="SldVolume" Maximum="1" SmallChange="0.02" LargeChange="0.1"
+                            TickFrequency="0.1" TickPlacement="BottomRight" Value="{Binding SldVolume}"
+                            Width="100" HorizontalAlignment="Right">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="ValueChanged">
+                            <cmd:EventToCommand Command="{Binding Mode=OneWay, Path=SldVolumeValueChangedCommand}"
+                                                    PassEventArgsToCommand="True"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Slider>
+            </StackPanel>
+        </Grid>
+    </Border>
+</UserControl>
