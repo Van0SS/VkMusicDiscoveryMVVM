@@ -31,8 +31,8 @@ namespace VkMusicDiscoveryMVVM
             for (int i = 0; i < letters.Length; i++)
             {
                 int c = letters[i];
-                if (((c > 'а') && (c < 'я')) ||
-                    ((c > 'А') && (c < 'Я')))
+                if (((c >= 'а') && (c <= 'я')) ||
+                    ((c >= 'А') && (c <= 'Я')))
                 {
                     return true;
                 }
